@@ -152,8 +152,8 @@ const App: React.FC = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {departments.map((department) => (
-              <TableRow key={department.id} className="hover:bg-gray-50">
+            {departments.map((department, idx) => (
+              <TableRow key={department.id} className={idx % 2 === 1 ? "bg-gray-50" : "bg-white"}>
                 <TableCell className="py-2 px-4 text-sm">
                   <input
                     type="checkbox"
