@@ -7,10 +7,10 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "../src/components/ui/table";
 import { MdOutlineCreateNewFolder, MdOutlineDelete } from "react-icons/md";
 import { FaRegEdit } from "react-icons/fa";
-import { Button } from "@/components/ui/button";
+import { Button } from "../src/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -18,9 +18,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+} from "../src/components/ui/dialog";
+import { Input } from "../src/components/ui/input";
+import { Label } from "../src/components/ui/label";
 import { Textarea } from "./components/ui/textarea";
 import {
   AlertDialog,
@@ -32,7 +32,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+} from "../src/components/ui/alert-dialog";
 
 type Department = {
   id: number;
@@ -153,7 +153,10 @@ const App: React.FC = () => {
           </TableHeader>
           <TableBody>
             {departments.map((department, idx) => (
-              <TableRow key={department.id} className={idx % 2 === 1 ? "bg-gray-50" : "bg-white"}>
+              <TableRow
+                key={department.id}
+                className={idx % 2 === 1 ? "bg-gray-50" : "bg-white"}
+              >
                 <TableCell className="py-2 px-4 text-sm">
                   <input
                     type="checkbox"
@@ -315,84 +318,84 @@ const App: React.FC = () => {
                     {student.gender}
                   </TableCell>
                   <TableCell className="py-2 px-4 flex gap-4">
-                  <AlertDialog>
-                    <AlertDialogTrigger>
-                      <MdOutlineDelete className="text-2xl cursor-pointer" />
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>
-                          Are you absolutely sure?
-                        </AlertDialogTitle>
-                        <AlertDialogDescription>
-                          This action cannot be undone. This will permanently
-                          delete your account and remove your data from our
-                          servers.
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction>Continue</AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
+                    <AlertDialog>
+                      <AlertDialogTrigger>
+                        <MdOutlineDelete className="text-2xl cursor-pointer" />
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>
+                            Are you absolutely sure?
+                          </AlertDialogTitle>
+                          <AlertDialogDescription>
+                            This action cannot be undone. This will permanently
+                            delete your account and remove your data from our
+                            servers.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction>Continue</AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
 
-                  <Dialog>
-                    <DialogTrigger asChild>
-                      <FaRegEdit className="text-2xl cursor-pointer" />
-                    </DialogTrigger>
-                    <DialogContent className="max-w-2xl">
-                      <DialogHeader>
-                        <DialogTitle>Edit Department Info</DialogTitle>
-                      </DialogHeader>
-                      <div className="grid gap-4 py-4">
-                        <div className="grid grid-cols-4 items-center gap-4">
-                          <Label htmlFor="name" className="text-right">
-                            Student Name
-                          </Label>
-                          <Input
-                            id="name"
-                            defaultValue={student.student_name}
-                            className="col-span-3"
-                          />
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <FaRegEdit className="text-2xl cursor-pointer" />
+                      </DialogTrigger>
+                      <DialogContent className="max-w-2xl">
+                        <DialogHeader>
+                          <DialogTitle>Edit Department Info</DialogTitle>
+                        </DialogHeader>
+                        <div className="grid gap-4 py-4">
+                          <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="name" className="text-right">
+                              Student Name
+                            </Label>
+                            <Input
+                              id="name"
+                              defaultValue={student.student_name}
+                              className="col-span-3"
+                            />
+                          </div>
+                          <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="username" className="text-right">
+                              Department Code
+                            </Label>
+                            <Input
+                              id="username"
+                              defaultValue={student.email}
+                              className="col-span-3"
+                            />
+                          </div>
+                          <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="username" className="text-right">
+                              Head of department
+                            </Label>
+                            <Input
+                              id="username"
+                              defaultValue={student.gender}
+                              className="col-span-3"
+                            />
+                          </div>
+                          <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="username" className="text-right">
+                              Gender
+                            </Label>
+                            <Textarea
+                              id="username"
+                              defaultValue={student.gender}
+                              className="col-span-3"
+                            />
+                          </div>
                         </div>
-                        <div className="grid grid-cols-4 items-center gap-4">
-                          <Label htmlFor="username" className="text-right">
-                            Department Code
-                          </Label>
-                          <Input
-                            id="username"
-                            defaultValue={student.email}
-                            className="col-span-3"
-                          />
-                        </div>
-                        <div className="grid grid-cols-4 items-center gap-4">
-                          <Label htmlFor="username" className="text-right">
-                            Head of department
-                          </Label>
-                          <Input
-                            id="username"
-                            defaultValue={student.gender}
-                            className="col-span-3"
-                          />
-                        </div>
-                        <div className="grid grid-cols-4 items-center gap-4">
-                          <Label htmlFor="username" className="text-right">
-                            Gender
-                          </Label>
-                          <Textarea
-                            id="username"
-                            defaultValue={student.gender}
-                            className="col-span-3"
-                          />
-                        </div>
-                      </div>
-                      <DialogFooter>
-                        <Button type="submit">Save changes</Button>
-                      </DialogFooter>
-                    </DialogContent>
-                  </Dialog>
-                </TableCell>
+                        <DialogFooter>
+                          <Button type="submit">Save changes</Button>
+                        </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
+                  </TableCell>
                 </TableRow>
               ))
             )}
