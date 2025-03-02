@@ -146,7 +146,6 @@ const App: React.FC = () => {
               <TableHead className="py-3 px-4 text-sm font-bold text-gray-700">
                 Description
               </TableHead>
-
               <TableHead className="py-3 px-4 text-sm font-bold text-gray-700">
                 Action
               </TableHead>
