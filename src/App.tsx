@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, FormEvent } from "react";
 import axios from "axios";
 import {
   Table,
@@ -80,6 +80,35 @@ const App: React.FC = () => {
     }
   };
 
+  const handleCreateDept = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+  
+    const form = e.currentTarget; // `e.currentTarget` is always the form element
+
+    const departmentData = {
+      department_name: (form.elements.namedItem("department_name") as HTMLInputElement)?.value || "",
+      head_of_department: (form.elements.namedItem("head_of_department") as HTMLInputElement)?.value || "",
+      department_code: (form.elements.namedItem("department_code") as HTMLInputElement)?.value || "",
+      description: (form.elements.namedItem("description") as HTMLTextAreaElement)?.value || "",
+    };
+    console.log("Department Created:", departmentData);
+
+    const data = await axios.post('http://localhost:5000/departments', departmentData)
+    console.log(data)
+
+  };
+
+  const handleDeleteDept = async(id: number)=>{
+    console.log(id)
+    try{
+
+      const data = await axios.delete(`http://localhost:5000/departments/${id}`)
+      console.log(data)
+    }catch(error){
+      console.log(error.response.data.error)
+    }
+  }
+
   return (
     <div className="p-6 md:p-8 lg:p-10 h-screen bg-gray-50 flex flex-col gap-6">
       {/* Department Table */}
@@ -96,35 +125,39 @@ const App: React.FC = () => {
               <DialogHeader>
                 <DialogTitle>Create a new department</DialogTitle>
               </DialogHeader>
-              <div className="grid gap-4 py-4">
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="name" className="text-right">
-                    Department Name
-                  </Label>
-                  <Input id="name" className="col-span-3" />
+              <form onSubmit={handleCreateDept}>
+                <div className="grid gap-4 py-4">
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="name" className="text-right">
+                      Department Name
+                    </Label>
+                    <Input id="name" name="department_name" className="col-span-3" />
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="username" className="text-right">
+                      Department Code
+                    </Label>
+                    <Input id="username" name="department_code" className="col-span-3" />
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="username" className="text-right">
+                      Head of department
+                    </Label>
+                    <Input id="username" name="head_of_department" className="col-span-3" />
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="username" className="text-right">
+                      Description
+                    </Label>
+                    <Textarea id="username" name="description" className="col-span-3" />
+                  </div>
                 </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="username" className="text-right">
-                    Department Code
-                  </Label>
-                  <Input id="username" className="col-span-3" />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="username" className="text-right">
-                    Head of department
-                  </Label>
-                  <Input id="username" className="col-span-3" />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="username" className="text-right">
-                    Description
-                  </Label>
-                  <Textarea id="username" className="col-span-3" />
-                </div>
-              </div>
-              <DialogFooter>
-                <Button type="submit">Create Department</Button>
-              </DialogFooter>
+                <DialogFooter>
+                  <Button type="submit">
+                    Create Department
+                  </Button>
+                </DialogFooter>
+              </form>
             </DialogContent>
           </Dialog>
         </div>
@@ -196,7 +229,7 @@ const App: React.FC = () => {
                       </AlertDialogHeader>
                       <AlertDialogFooter>
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction>Continue</AlertDialogAction>
+                        <AlertDialogAction onClick={()=>handleDeleteDept(department.id)}>Continue</AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>
                   </AlertDialog>
