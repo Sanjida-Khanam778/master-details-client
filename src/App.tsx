@@ -412,7 +412,7 @@ const App: React.FC = () => {
 
       {/* Students Table */}
       <div className="h-1/2 overflow-y-auto border rounded-lg bg-white ">
-        <div className="text-lg font-semibold mb-4 text-gray-800 px-4 pt-4 text-center">
+        <div className="text-lg flex justify-center items-center gap-4 font-semibold mb-4 text-gray-800 px-4 pt-4 text-center">
           <p>List of Students ({students.length})</p>
           <Dialog>
             <DialogTrigger asChild>
@@ -428,41 +428,41 @@ const App: React.FC = () => {
                 <div className="grid gap-4 py-4">
                   <div className="grid grid-cols-4 items-center gap-4">
                     <Label htmlFor="name" className="text-right">
-                      Department Name
+                       Name
                     </Label>
                     <Input
                       id="name"
-                      name="department_name"
+                      name="student_name"
                       className="col-span-3"
                     />
                   </div>
                   <div className="grid grid-cols-4 items-center gap-4">
                     <Label htmlFor="username" className="text-right">
-                      Department Code
+                      Email
                     </Label>
                     <Input
                       id="username"
-                      name="department_code"
+                      name="email"
                       className="col-span-3"
                     />
                   </div>
                   <div className="grid grid-cols-4 items-center gap-4">
                     <Label htmlFor="username" className="text-right">
-                      Head of department
+                      Enrollment Date
                     </Label>
                     <Input
                       id="username"
-                      name="head_of_department"
+                      name="date"
                       className="col-span-3"
                     />
                   </div>
                   <div className="grid grid-cols-4 items-center gap-4">
                     <Label htmlFor="username" className="text-right">
-                      Description
+                      Gender
                     </Label>
                     <Textarea
                       id="username"
-                      name="description"
+                      name="gender"
                       className="col-span-3"
                     />
                   </div>
