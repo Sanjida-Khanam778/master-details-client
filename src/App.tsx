@@ -562,9 +562,9 @@ const App: React.FC = () => {
                           className="w-[200px] justify-between"
                         >
                           {value2
-                            ? departments.find((department) => department.department_name === value)
+                            ? departments.find((department) => department.department_name === value2)
                                 ?.department_name
-                            : "Select gender..."}
+                            : "Select Department..."}
                           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
                       </PopoverTrigger>
