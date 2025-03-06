@@ -1,7 +1,34 @@
-import React, { useState, useEffect, FormEvent } from "react";
+import { useState, useEffect, FormEvent } from "react";
 import axios from "axios";
 import { Toaster } from "../src/components/ui/sonner";
 import { toast } from "sonner";
+// "use client"
+
+import { Check, ChevronsUpDown } from "lucide-react";
+
+import { cn } from "../src/lib/utils";
+import {
+  Command,
+  CommandGroup,
+  CommandItem,
+  CommandList,
+} from "../src/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "../src/components/ui/popover";
+
+const genders = [
+  {
+    value: "male",
+    label: "Male",
+  },
+  {
+    value: "female",
+    label: "Female",
+  },
+];
 
 import {
   Table,
@@ -36,6 +63,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "../src/components/ui/alert-dialog";
+import * as React from "react";
 
 type Department = {
   id: number;
@@ -56,11 +84,16 @@ type Student = {
 };
 
 const App: React.FC = () => {
+  const [open, setOpen] = React.useState(false);
+  const [openDepartment, setOpenDepartment] = useState(false);
+  const [value, setValue] = React.useState("");
+  const [value2, setValue2] = React.useState("");
   const [departments, setDepartments] = useState<Department[]>([]);
   const [students, setStudents] = useState<Student[]>([]);
   const [selectedDepartmentId, setSelectedDepartmentId] = useState<
     number | null
   >(null);
+  console.log(departments)
 
   useEffect(() => {
     // Fetch all departments
@@ -127,76 +160,93 @@ const App: React.FC = () => {
 
   const handleEditDept = async (e: FormEvent<HTMLFormElement>, id: number) => {
     e.preventDefault();
-  
+
     const form = e.currentTarget;
-  
+
     const updatedDept = {
-      department_name: (form.elements.namedItem("department_name") as HTMLInputElement)?.value || "",
-      head_of_department: (form.elements.namedItem("head_of_department") as HTMLInputElement)?.value || "",
-      department_code: (form.elements.namedItem("department_code") as HTMLInputElement)?.value || "",
-      description: (form.elements.namedItem("description") as HTMLTextAreaElement)?.value || "",
+      department_name:
+        (form.elements.namedItem("department_name") as HTMLInputElement)
+          ?.value || "",
+      head_of_department:
+        (form.elements.namedItem("head_of_department") as HTMLInputElement)
+          ?.value || "",
+      department_code:
+        (form.elements.namedItem("department_code") as HTMLInputElement)
+          ?.value || "",
+      description:
+        (form.elements.namedItem("description") as HTMLTextAreaElement)
+          ?.value || "",
     };
-  
+
     try {
       await axios.put(`http://localhost:5000/departments/${id}`, updatedDept);
-  
+
       setDepartments((prevDepartments) =>
         prevDepartments.map((dept) =>
           dept.id === id ? { ...dept, ...updatedDept } : dept
         )
       );
-  
+
       toast.success("Department updated successfully!");
     } catch (error) {
       toast.error("Failed to update department.");
       console.error(error);
     }
   };
-  
-  
-  const handleEditStudent = async (e: FormEvent<HTMLFormElement>, id: number) => {
+
+  const handleEditStudent = async (
+    e: FormEvent<HTMLFormElement>,
+    id: number
+  ) => {
     e.preventDefault();
-  
+
     const form = e.currentTarget;
-  
+
     const updatedStudent = {
-      student_name: (form.elements.namedItem("student_name") as HTMLInputElement)?.value || "",
-      email: (form.elements.namedItem("email") as HTMLInputElement)?.value || "",
-      enrollment_date: (form.elements.namedItem("enrollment_date") as HTMLInputElement)?.value || "",
-      gender: (form.elements.namedItem("gender") as HTMLInputElement)?.value || "",
+      student_name:
+        (form.elements.namedItem("student_name") as HTMLInputElement)?.value ||
+        "",
+      email:
+        (form.elements.namedItem("email") as HTMLInputElement)?.value || "",
+      enrollment_date:
+        (form.elements.namedItem("enrollment_date") as HTMLInputElement)
+          ?.value || "",
+      gender:
+        (form.elements.namedItem("gender") as HTMLInputElement)?.value || "",
     };
-  
+
     try {
       await axios.put(`http://localhost:5000/students/${id}`, updatedStudent);
-  
+
       // Update the student in state without refreshing
       setStudents((prevStudents) =>
         prevStudents.map((student) =>
           student.id === id ? { ...student, ...updatedStudent } : student
         )
       );
-  
+
       toast.success("Student updated successfully!");
     } catch (error) {
       toast.error("Failed to update student.");
       console.error(error);
     }
   };
+
   const handleDeleteStudent = async (id: number) => {
     try {
       await axios.delete(`http://localhost:5000/students/${id}`);
-  
+
       // Remove student from state
-      setStudents((prevStudents) => prevStudents.filter(student => student.id !== id));
- 
+      setStudents((prevStudents) =>
+        prevStudents.filter((student) => student.id !== id)
+      );
+
       toast.success("Student deleted successfully!");
     } catch (error) {
       toast.error("Failed to delete student.");
       console.error(error);
     }
   };
-  
-  
 
   return (
     <div className="p-6 md:p-8 lg:p-10 h-screen bg-gray-50 flex flex-col gap-6">
@@ -428,7 +478,7 @@ const App: React.FC = () => {
                 <div className="grid gap-4 py-4">
                   <div className="grid grid-cols-4 items-center gap-4">
                     <Label htmlFor="name" className="text-right">
-                       Name
+                      Name
                     </Label>
                     <Input
                       id="name"
@@ -440,31 +490,115 @@ const App: React.FC = () => {
                     <Label htmlFor="username" className="text-right">
                       Email
                     </Label>
-                    <Input
-                      id="username"
-                      name="email"
-                      className="col-span-3"
-                    />
+                    <Input id="username" name="email" className="col-span-3" />
                   </div>
                   <div className="grid grid-cols-4 items-center gap-4">
                     <Label htmlFor="username" className="text-right">
                       Enrollment Date
                     </Label>
-                    <Input
-                      id="username"
-                      name="date"
-                      className="col-span-3"
-                    />
+                    <Input id="username" name="date" className="col-span-3" />
                   </div>
                   <div className="grid grid-cols-4 items-center gap-4">
                     <Label htmlFor="username" className="text-right">
                       Gender
                     </Label>
-                    <Textarea
-                      id="username"
-                      name="gender"
-                      className="col-span-3"
-                    />
+                    <Popover open={open} onOpenChange={setOpen}>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          aria-expanded={open}
+                          className="w-[200px] justify-between"
+                        >
+                          {value
+                            ? genders.find((gender) => gender.value === value)
+                                ?.label
+                            : "Select gender..."}
+                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-[200px] p-0">
+                        <Command>
+                          <CommandList>
+                            <CommandGroup>
+                              {genders.map((gender) => (
+                                <CommandItem
+                                  key={gender.value}
+                                  value={gender.value}
+                                  onSelect={(currentValue: string) => {
+                                    setValue(
+                                      currentValue === value ? "" : currentValue
+                                    );
+                                    setOpen(false);
+                                  }}
+                                >
+                                  <Check
+                                    className={cn(
+                                      "mr-2 h-4 w-4",
+                                      value === gender.value
+                                        ? "opacity-100"
+                                        : "opacity-0"
+                                    )}
+                                  />
+                                  {gender.label}
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          </CommandList>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="username" className="text-right">
+                      Department
+                    </Label>
+                    <Popover open={openDepartment} onOpenChange={setOpenDepartment}>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          aria-expanded={openDepartment}
+                          className="w-[200px] justify-between"
+                        >
+                          {value2
+                            ? departments.find((department) => department.department_name === value)
+                                ?.department_name
+                            : "Select gender..."}
+                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-[200px] p-0">
+                        <Command>
+                          <CommandList>
+                            <CommandGroup>
+                              {departments.map((department) => (
+                                <CommandItem
+                                  key={department.id}
+                                  value={department.department_name}
+                                  onSelect={(currentValue: string) => {
+                                    setValue2(
+                                      currentValue === value2 ? "" : currentValue
+                                    );
+                                    setOpenDepartment(false);
+                                  }}
+                                >
+                                  <Check
+                                    className={cn(
+                                      "mr-2 h-4 w-4",
+                                      value === department.department_name
+                                        ? "opacity-100"
+                                        : "opacity-0"
+                                    )}
+                                  />
+                                  {department.department_name}
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          </CommandList>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
                   </div>
                 </div>
                 <DialogFooter>
@@ -473,7 +607,6 @@ const App: React.FC = () => {
               </form>
             </DialogContent>
           </Dialog>
-
         </div>
         <Table className="table-auto w-full">
           <TableHeader className="bg-gray-100">
@@ -542,7 +675,11 @@ const App: React.FC = () => {
                         </AlertDialogHeader>
                         <AlertDialogFooter>
                           <AlertDialogCancel>Cancel</AlertDialogCancel>
-                          <AlertDialogAction onClick={()=>handleDeleteStudent(student.id)}>Continue</AlertDialogAction>
+                          <AlertDialogAction
+                            onClick={() => handleDeleteStudent(student.id)}
+                          >
+                            Continue
+                          </AlertDialogAction>
                         </AlertDialogFooter>
                       </AlertDialogContent>
                     </AlertDialog>
@@ -555,7 +692,9 @@ const App: React.FC = () => {
                         <DialogHeader>
                           <DialogTitle>Edit Student Info</DialogTitle>
                         </DialogHeader>
-                        <form onSubmit={(e) => handleEditStudent(e, student.id)}>
+                        <form
+                          onSubmit={(e) => handleEditStudent(e, student.id)}
+                        >
                           <div className="grid gap-4 py-4">
                             <div className="grid grid-cols-4 items-center gap-4">
                               <Label htmlFor="name" className="text-right">
