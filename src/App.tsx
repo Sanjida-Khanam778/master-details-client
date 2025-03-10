@@ -89,7 +89,7 @@ const App: React.FC = () => {
   const [value, setValue] = React.useState("");
   const [value2, setValue2] = React.useState("");
   const [departments, setDepartments] = useState<Department[]>([]);
-  
+
   const [students, setStudents] = useState<Student[]>([]);
   const [selectedDepartmentId, setSelectedDepartmentId] = useState<
     number | null
@@ -106,7 +106,6 @@ const App: React.FC = () => {
   const memoizedStudents = React.useMemo(() => {
     return departments; // You could add sorting/filtering logic here
   }, [departments]); // This will recompute when `students` state changes
-
 
   const handleCheckboxChange = (departmentId: number) => {
     if (selectedDepartmentId === departmentId) {
@@ -150,26 +149,34 @@ const App: React.FC = () => {
     // setDepartments(data: )
     setDepartments(data.data);
   };
-  
-  const handleCreateStudent = async (e: FormEvent<HTMLFormElement>)=>{
+
+  const handleCreateStudent = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
 
     const studentData = {
-      student_name: (form.elements.namedItem("student_name") as HTMLInputElement)?.value || "",
-      email: (form.elements.namedItem("email") as HTMLInputElement)?.value || "",
+      student_name:
+        (form.elements.namedItem("student_name") as HTMLInputElement)?.value ||
+        "",
+      email:
+        (form.elements.namedItem("email") as HTMLInputElement)?.value || "",
       gender: value,
       department: value2,
-      department_id: departments.find(department=>department.department_name===value2)?.id || 0,
+      department_id:
+        departments.find((department) => department.department_name === value2)
+          ?.id || 0,
 
       // department: value2,
       enrollment_date: new Date(),
-    }
+    };
 
-    console.log(studentData)
-    const data = await axios.post("http://localhost:5000/students", studentData)
-    console.log(data)
-  }
+    console.log(studentData);
+    const data = await axios.post(
+      "http://localhost:5000/students",
+      studentData
+    );
+    console.log(data);
+  };
 
   const handleDeleteDept = async (id: number) => {
     console.log(id);
@@ -220,7 +227,6 @@ const App: React.FC = () => {
       console.error(error);
     }
   };
-
 
   const handleEditStudent = async (
     e: FormEvent<HTMLFormElement>,
@@ -581,59 +587,59 @@ const App: React.FC = () => {
                       Department
                     </Label>
                     <div className="col-span-3">
-                    <Popover
-                      open={openDepartment}
-                      onOpenChange={setOpenDepartment}
-                    >
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant="outline"
-                          role="combobox"
-                          aria-expanded={openDepartment}
-                          className="w-full justify-between"
-                        >
-                          {value2
-                            ? departments.find(
-                                (department) =>
-                                  department.department_name === value2
-                              )?.department_name
-                            : "Select Department..."}
-                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-[400px] p-0">
-                        <Command>
-                          <CommandList>
-                            <CommandGroup>
-                              {departments.map((department) => (
-                                <CommandItem
-                                  key={department.id}
-                                  value={department.department_name}
-                                  onSelect={(currentValue: string) => {
-                                    setValue2(
-                                      currentValue === value2
-                                        ? ""
-                                        : currentValue
-                                    );
-                                    setOpenDepartment(false);
-                                  }}
-                                >
-                                  <Check
-                                    className={cn(
-                                      "mr-2 h-4 w-4",
-                                      value === department.department_name
-                                        ? "opacity-100"
-                                        : "opacity-0"
-                                    )}
-                                  />
-                                  {department.department_name}
-                                </CommandItem>
-                              ))}
-                            </CommandGroup>
-                          </CommandList>
-                        </Command>
-                      </PopoverContent>
-                    </Popover>
+                      <Popover
+                        open={openDepartment}
+                        onOpenChange={setOpenDepartment}
+                      >
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            role="combobox"
+                            aria-expanded={openDepartment}
+                            className="w-full justify-between"
+                          >
+                            {value2
+                              ? departments.find(
+                                  (department) =>
+                                    department.department_name === value2
+                                )?.department_name
+                              : "Select Department..."}
+                            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-[400px] p-0">
+                          <Command>
+                            <CommandList>
+                              <CommandGroup>
+                                {departments.map((department) => (
+                                  <CommandItem
+                                    key={department.id}
+                                    value={department.department_name}
+                                    onSelect={(currentValue: string) => {
+                                      setValue2(
+                                        currentValue === value2
+                                          ? ""
+                                          : currentValue
+                                      );
+                                      setOpenDepartment(false);
+                                    }}
+                                  >
+                                    <Check
+                                      className={cn(
+                                        "mr-2 h-4 w-4",
+                                        value === department.department_name
+                                          ? "opacity-100"
+                                          : "opacity-0"
+                                      )}
+                                    />
+                                    {department.department_name}
+                                  </CommandItem>
+                                ))}
+                              </CommandGroup>
+                            </CommandList>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
                     </div>
                   </div>
                 </div>
@@ -754,27 +760,128 @@ const App: React.FC = () => {
                                 className="col-span-3"
                               />
                             </div>
-                            <div className="grid grid-cols-4 items-center gap-4">
-                              <Label htmlFor="username" className="text-right">
-                                Enrollment Date
-                              </Label>
-                              <Input
-                                id="username"
-                                name="enrollment_date"
-                                defaultValue={student.enrollment_date}
-                                className="col-span-3"
-                              />
-                            </div>
+                          
                             <div className="grid grid-cols-4 items-center gap-4">
                               <Label htmlFor="username" className="text-right">
                                 Gender
                               </Label>
-                              <Input
-                                id="username"
-                                name="gender"
-                                defaultValue={student.gender}
-                                className="col-span-3"
-                              />
+                              <div className="col-span-3">
+                                <Popover open={open} onOpenChange={setOpen}>
+                                  <PopoverTrigger asChild>
+                                    <Button
+                                      variant="outline"
+                                      role="combobox"
+                                      aria-expanded={open}
+                                      className="w-full justify-between"
+                                    >
+                                      {value
+                                        ? genders.find(
+                                            (gender) => gender.value === value
+                                          )?.label
+                                        : "Select gender..."}
+                                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                    </Button>
+                                  </PopoverTrigger>
+                                  <PopoverContent className="w-[300px] p-0">
+                                    <Command>
+                                      <CommandList>
+                                        <CommandGroup>
+                                          {genders.map((gender) => (
+                                            <CommandItem
+                                              key={gender.value}
+                                              value={gender.value}
+                                              onSelect={(
+                                                currentValue: string
+                                              ) => {
+                                                setValue(
+                                                  currentValue === value
+                                                    ? ""
+                                                    : currentValue
+                                                );
+                                                setOpen(false);
+                                              }}
+                                            >
+                                              <Check
+                                                className={cn(
+                                                  "mr-2 h-4 w-4",
+                                                  value === gender.value
+                                                    ? "opacity-100"
+                                                    : "opacity-0"
+                                                )}
+                                              />
+                                              {gender.label}
+                                            </CommandItem>
+                                          ))}
+                                        </CommandGroup>
+                                      </CommandList>
+                                    </Command>
+                                  </PopoverContent>
+                                </Popover>
+                              </div>
+                            </div>
+                            <div className="grid grid-cols-4 items-center gap-4">
+                              <Label htmlFor="username" className="text-right">
+                                Department
+                              </Label>
+                              <div className="col-span-3">
+                                <Popover
+                                  open={openDepartment}
+                                  onOpenChange={setOpenDepartment}
+                                >
+                                  <PopoverTrigger asChild>
+                                    <Button
+                                      variant="outline"
+                                      role="combobox"
+                                      aria-expanded={openDepartment}
+                                      className="w-full justify-between"
+                                    >
+                                      {value2
+                                        ? departments.find(
+                                            (department) =>
+                                              department.department_name ===
+                                              value2
+                                          )?.department_name
+                                        : "Select Department..."}
+                                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                    </Button>
+                                  </PopoverTrigger>
+                                  <PopoverContent className="w-[400px] p-0">
+                                    <Command>
+                                      <CommandList>
+                                        <CommandGroup>
+                                          {departments.map((department) => (
+                                            <CommandItem
+                                              key={department.id}
+                                              value={department.department_name}
+                                              onSelect={(
+                                                currentValue: string
+                                              ) => {
+                                                setValue2(
+                                                  currentValue === value2
+                                                    ? ""
+                                                    : currentValue
+                                                );
+                                                setOpenDepartment(false);
+                                              }}
+                                            >
+                                              <Check
+                                                className={cn(
+                                                  "mr-2 h-4 w-4",
+                                                  value ===
+                                                    department.department_name
+                                                    ? "opacity-100"
+                                                    : "opacity-0"
+                                                )}
+                                              />
+                                              {department.department_name}
+                                            </CommandItem>
+                                          ))}
+                                        </CommandGroup>
+                                      </CommandList>
+                                    </Command>
+                                  </PopoverContent>
+                                </Popover>
+                              </div>
                             </div>
                           </div>
                           <DialogFooter>
